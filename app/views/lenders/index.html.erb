@@ -1,0 +1,101 @@
+<style>
+  table, th, td{
+    border-collapse:collapse;
+    border: 1px solid black;
+    padding:5px;
+  }
+  th{
+    background-color:silver;
+  }
+</style>
+
+<% if flash[:errors] %>
+  <p style="color:red;"><%= flash[:errors] %></p>
+<% end %>
+<% if flash[:notices] %>
+  <p style="color:green;"><%= flash[:notices] %></p>
+<% end %>
+
+<h1>Name: <%=@lender.first_name%> <%=@lender.last_name%></h1>
+<h3>Account Balance: $<%=@lender.money%></h3>
+
+<h2>List of people who are in need of help:</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Money Needed For</th>
+      <th>Description</th>
+      <th>Amount needed</th>
+      <th>Amount Raised</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @lender.borrowers.count == @borrowers.count %>
+    <tr>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <% end %>
+    <% @borrowers.each do |borrower| %>
+    <% unless @lender.borrowers.include?(borrower) %>
+    <tr>
+      <td><%=borrower.first_name%> <%=borrower.last_name%></td>
+      <td><%=borrower.purpose%></td>
+      <td><%=borrower.description%></td>
+      <td>$<%=borrower.money%></td>
+      <td>$<%=borrower.raised%></td>
+      <td>
+        <form action="/lender/<%=@lender.id%>/lend/<%=borrower.id%>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+          $<input type="number" name="history[amount]">
+          <input type="submit" value="Lend">
+        </form>
+
+      </td>
+    </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>List of people you lent money to:</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Money Needed For</th>
+      <th>Description</th>
+      <th>Amount needed</th>
+      <th>Amount Raised</th>
+      <th>Amount Lent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @lender.borrowers.count == 0 %>
+    <tr>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <% end %>
+    <% @lender.borrowers.each do |borrower| %>
+    <tr>
+      <td><%=borrower.first_name%> <%=borrower.last_name%></td>
+      <td><%=borrower.purpose%></td>
+      <td><%=borrower.description%></td>
+      <td>$<%=borrower.money%></td>
+      <td>$<%=borrower.raised%></td>
+      <td>$<%=@lender.histories.find_by(borrower:borrower).amount%></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

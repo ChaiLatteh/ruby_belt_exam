@@ -1,0 +1,48 @@
+<style>
+  form{
+    display:inline-table;
+    border: 1px solid black;
+    margin-right:50px;
+    padding:10px;
+    vertical-align:top;
+  }
+  label{
+    display:table;
+    margin-bottom:5px;
+  }
+</style>
+
+<% if flash[:errors] %>
+  <p style="color:red;"><%= flash[:errors] %></p>
+<% end %>
+<% if flash[:notices] %>
+  <p style="color:green;"><%= flash[:notices] %></p>
+<% end %>
+
+<form action="/register_lender" method="post">
+  <h2>Lender</h2>
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <label>First Name: <input type="text" name="lender[first_name]"></label>
+  <label>Last Name: <input type="text" name="lender[last_name]"></label>
+  <label>Email: <input type="email" name="lender[email]"></label>
+  <label>Password: <input type="password" name="lender[password]"></label>
+  <label>Confirm PW: <input type="password" name="lender[password_confirmation]"></label>
+  <label>Money: $<input type="number" name="lender[money]"></label>
+  <a href="/login">Already a member?</a>
+  <input type="submit" value="Register">
+</form>
+
+<form action="register_borrower" method="post">
+  <h2>Borrower</h2>
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <label>First Name: <input type="text" name="borrower[first_name]"></label>
+  <label>Last Name: <input type="text" name="borrower[last_name]"></label>
+  <label>Email: <input type="email" name="borrower[email]"></label>
+  <label>Password: <input type="password" name="borrower[password]"></label>
+  <label>Confirm PW: <input type="password" name="borrower[password_confirmation]"></label>
+  <label>Need Money for: <input type="text" name="borrower[purpose]"></label>
+  <label>Description: <textarea name="borrower[description]" rows="3" cols="40"></textarea></label>
+  <label>Amount Needed: $<input type="number" name="borrower[money]"></label>
+  <a href="/login">Already a member?</a>
+  <input type="submit" value="Register">
+</form>

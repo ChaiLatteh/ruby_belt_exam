@@ -1,0 +1,41 @@
+<style>
+  table, th, td{
+    border-collapse:collapse;
+    border: 1px solid black;
+    padding:5px;
+  }
+  th{
+    background-color:silver;
+  }
+</style>
+
+<h1>Name: <%=@borrower.first_name%> <%=@borrower.last_name%></h1>
+<h3>Amount Needed: $<%=@borrower.money%></h3>
+<h3>Amount Raised: $<%=@borrower.raised%></h3>
+
+<h2>List of people who lent you money:</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Amount Lent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @borrower.lenders.count == 0 %>
+    <tr>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <% end %>
+    <% @borrower.lenders.each do |lender| %>
+    <tr>
+      <td><%=lender.first_name%> <%=lender.last_name%></td>
+      <td><%=lender.email%></td>
+      <td>$<%=@borrower.histories.find_by(lender:lender).amount%></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
